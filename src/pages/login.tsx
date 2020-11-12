@@ -8,45 +8,45 @@ import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/router";
 
 const Login: React.FC<{}> = ({}) => {
-	const router = useRouter();
-	const [, login] = useLoginMutation();
-	return (
-		<Wrapper variant="small">
-			<Formik
-				initialValues={{ username: "", password: "" }}
-				onSubmit={async (values, { setErrors }) => {
-					console.log(values);
-					const response = await login({ options: values });
-					if (response.data?.login.errors) {
-						setErrors(toErrorMap(response.data.login.errors));
-					} else if (response.data?.login.user) {
-						router.push("/");
-					}
-				}}
-			>
-				{({ isSubmitting }) => (
-					<Form>
-						<InputField
-							name="username"
-							placeholder="username"
-							label="Username"
-						/>
-						<Box mt={4}>
-							<InputField
-								name="password"
-								placeholder="password"
-								label="Password"
-								type="password"
-							/>
-						</Box>
-						<Button mt={4} isLoading={isSubmitting} color="green" type="submit">
-							Login
-						</Button>
-					</Form>
-				)}
-			</Formik>
-		</Wrapper>
-	);
+  const router = useRouter();
+  const [, login] = useLoginMutation();
+  return (
+    <Wrapper variant="small">
+      <Formik
+        initialValues={{ username: "", password: "" }}
+        onSubmit={async (values, { setErrors }) => {
+          console.log(values);
+          const response = await login({ options: values });
+          if (response.data?.login.errors) {
+            setErrors(toErrorMap(response.data.login.errors));
+          } else if (response.data?.login.user) {
+            router.push("/");
+          }
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <InputField
+              name="username"
+              placeholder="username"
+              label="Username"
+            />
+            <Box mt={4}>
+              <InputField
+                name="password"
+                placeholder="password"
+                label="Password"
+                type="password"
+              />
+            </Box>
+            <Button mt={4} isLoading={isSubmitting} color="green" type="submit">
+              Login
+            </Button>
+          </Form>
+        )}
+      </Formik>
+    </Wrapper>
+  );
 };
 
 export default Login;
