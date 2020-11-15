@@ -23,19 +23,23 @@ const Login: React.FC<{}> = ({}) => {
           if (response.data?.login.errors) {
             setErrors(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.user) {
-            router.push("/");
+            if (typeof router.query.next === "string")
+              router.push(router.query.next);
+            else router.push("/");
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form>
             <InputField
+              textarea={false}
               name="usernameOrEmail"
               placeholder="username or email"
               label="Username or Email"
             />
             <Box mt={4}>
               <InputField
+                textarea={false}
                 name="password"
                 placeholder="password"
                 label="Password"
