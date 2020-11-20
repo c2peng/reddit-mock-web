@@ -32,6 +32,7 @@ const UpdootSection: React.FunctionComponent<IUpdootSectionProps> = ({
           setLoadingState("not-loading");
         }}
         aria-label="updoot post"
+        colorScheme={post.voteStatus === 1 ? "green" : undefined}
         isLoading={loadingState === "updoot-loading"}
       />
       {post.points}
@@ -49,6 +50,7 @@ const UpdootSection: React.FunctionComponent<IUpdootSectionProps> = ({
           setLoadingState("not-loading");
         }}
         aria-label="downdoot post"
+        colorScheme={post.voteStatus === -1 ? "red" : undefined}
         isLoading={loadingState === "downdoot-loading"}
       />
     </Flex>
