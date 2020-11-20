@@ -1,6 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import Layout from "../components/Layout";
-import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
+import {
+  useDeletePostMutation,
+  useMeQuery,
+  usePostsQuery,
+} from "../generated/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 import NextLink from "next/link";
 import React, { useState } from "react";
@@ -15,7 +19,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import UpdootSection from "../components/UpdootSection";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
@@ -27,6 +31,8 @@ const Index = () => {
   });
 
   const [, deletePost] = useDeletePostMutation();
+
+  const [{ data: meData }] = useMeQuery();
 
   if (!fetching && !data) {
     return <div>you got no posts for some reason</div>;
@@ -53,14 +59,30 @@ const Index = () => {
                     <Text flex={1} mt={4}>
                       {p.textSnippet}
                     </Text>
-                    <IconButton
-                      aria-label="Delete Post"
-                      colorScheme="red"
-                      icon={<DeleteIcon />}
-                      onClick={() => {
-                        deletePost({ id: p.id });
-                      }}
-                    />
+                    {meData?.me?.id !== p.creator.id ? null : (
+                      <Box ml="auto">
+                        <NextLink
+                          href="/post/edit/[id]"
+                          as={`/post/edit/${p.id}`}
+                        >
+                          <IconButton
+                            aria-label="Update Post"
+                            icon={<EditIcon />}
+                            ml="auto"
+                            mr={4}
+                          />
+                        </NextLink>
+
+                        <IconButton
+                          ml="auto"
+                          aria-label="Delete Post"
+                          icon={<DeleteIcon />}
+                          onClick={() => {
+                            deletePost({ id: p.id });
+                          }}
+                        />
+                      </Box>
+                    )}
                   </Flex>
                 </Box>
               </Flex>
