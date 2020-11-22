@@ -5,7 +5,7 @@ import {
   Heading,
   Link,
   Stack,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
@@ -13,9 +13,7 @@ import React, { useState } from "react";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import Layout from "../components/Layout";
 import UpdootSection from "../components/UpdootSection";
-import {
-  usePostsQuery
-} from "../generated/graphql";
+import { usePostsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../util/createUrqlClient";
 
 const Index = () => {
@@ -23,12 +21,16 @@ const Index = () => {
     limit: 15,
     cursor: null as null | string,
   });
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
 
   if (!fetching && !data) {
-    return <div>you got no posts for some reason</div>;
+    return (
+      <div>
+        <div>{error?.message}</div>
+      </div>
+    );
   }
   return (
     <Layout>
